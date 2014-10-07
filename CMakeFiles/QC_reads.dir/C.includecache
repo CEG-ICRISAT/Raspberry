@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/km/src/SAMtools/samtools-1.0/Q3/qc.c
+stdio.h
+-
+qc.h
+/home/km/src/SAMtools/samtools-1.0/Q3/qc.h
+
+/home/km/src/SAMtools/samtools-1.0/Q3/qc.h
+zlib.h
+-
+stdio.h
+-
+inttypes.h
+-
+htslib/kseq.h
+/home/km/src/SAMtools/samtools-1.0/Q3/htslib/kseq.h
+
+include/htslib/kseq.h
+ctype.h
+-
+string.h
+-
+stdlib.h
+-
+

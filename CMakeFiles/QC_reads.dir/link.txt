@@ -1,0 +1,1 @@
+/usr/bin/cc  -O3 -DNDEBUG  -s CMakeFiles/QC_reads.dir/qc.c.o  -o bin/QC_reads -rdynamic -lm -lz -lpthread 

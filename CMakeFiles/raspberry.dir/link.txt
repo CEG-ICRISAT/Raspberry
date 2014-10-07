@@ -1,0 +1,1 @@
+/usr/bin/cc  -O3 -static -fopenmp -O3 -DNDEBUG  -s CMakeFiles/raspberry.dir/qc.c.o  -o bin/raspberry -rdynamic -lm -lz -lpthread 

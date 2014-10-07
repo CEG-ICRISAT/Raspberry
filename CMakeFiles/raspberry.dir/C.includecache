@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/km/src/Raspberry-0.2/qc.c
+stdio.h
+-
+omp.h
+-
+qc.h
+/home/km/src/Raspberry-0.2/qc.h
+
+include/htslib/kseq.h
+ctype.h
+-
+string.h
+-
+stdlib.h
+-
+
+include/qc.h
+zlib.h
+-
+stdio.h
+-
+inttypes.h
+-
+htslib/kseq.h
+include/htslib/kseq.h
+
