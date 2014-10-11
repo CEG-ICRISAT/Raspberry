@@ -9,12 +9,13 @@ ICRISAT, Hyderabad, India
 ## ABOUT
 * Developed in C language using HTSlib (http://htslib.org) library with a focus on speed and parallelism.
 * Works and tested with compressed(gzip)/uncompressed Illumina MiSeq and HiSeq FASTQ paired/single end reads.
-* The package includes a static compiled binary file
+* The package includes a static compiled binary file on x86_64 platform
 * Helpful to process hundreds or thousands of samples
 
 ## COMPILE and INSTALL
-do the following in decompressed dir of the tar file
+do the following in decompressed/cloned dir
 ```
+cd Raspberry
 cmake .
 make
 ```
