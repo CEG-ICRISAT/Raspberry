@@ -2,7 +2,8 @@
 
 A quick, parallelized quality control tool for processing NGS big data
 
-Authors: K.A.V.S. Krishna Mohan (k.krishnamohan@cgiar.org) and Aamir W Khan (a.khan@cgiar.org) and Rajeev K Varshney (r.k.varshney@cgiar.org)
+Authors: Mohan AVSK Katta (k.krishnamohan@cgiar.org, Aamir W Khan (a.khan@cgiar.org), Dadakhalandar Doddamani (d.doddamani@cgiar.org) and Rajeev K Varshney (r.k.varshney@cgiar.org)
+
 Center of Excellence in Genomics
 ICRISAT, Hyderabad, India
 
