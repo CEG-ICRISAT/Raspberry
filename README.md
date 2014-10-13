@@ -5,13 +5,15 @@ A quick, parallelized quality control tool for processing NGS big data
 Authors: Mohan AVSK Katta (k.krishnamohan@cgiar.org, Aamir W Khan (a.khan@cgiar.org), Dadakhalandar Doddamani (d.doddamani@cgiar.org) and Rajeev K Varshney (r.k.varshney@cgiar.org)
 
 Center of Excellence in Genomics
+
 ICRISAT, Hyderabad, India
 
 ## ABOUT
+* Process hundreds or thousands of samples 
 * Developed in C language using HTSlib (http://htslib.org) library with a focus on speed and parallelism.
-* Works and tested with compressed(gzip)/uncompressed Illumina MiSeq and HiSeq FASTQ paired/single end reads.
-* The package includes a static compiled binary file on x86_64 platform
-* Helpful to process hundreds or thousands of samples
+* Works and tested with compressed(gzip) or uncompressed Illumina MiSeq and HiSeq FASTQ paired/single end reads.
+* The package includes a static binary (bin/raspberry) compiled on x86_64 platform inase you want to use it standalone; otherwise you may have to compile
+
 
 ## COMPILE and INSTALL
 do the following in decompressed/cloned dir
