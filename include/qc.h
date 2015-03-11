@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<inttypes.h>
 #include "htslib/kseq.h"
-#define OFFSET 33
+//#define offset 33
 KSEQ_INIT(gzFile, gzread);
 #define SUMMARY_TYPE \
 typedef struct { \
@@ -12,7 +12,7 @@ typedef struct { \
 }summary_t;
 SUMMARY_TYPE;
 
-#define COUNTS_INIT(OFFSET) \
+#define COUNTS_INIT \
 summary_t* counts_init(){ \
     summary_t *summary; \
     summary = (summary_t*) malloc(sizeof(summary_t)); \
@@ -29,16 +29,16 @@ void free_summary(summary_t *summary){ \
 void get_gc_content(summary_t *summary){ \
     summary->GC = (summary->G + summary->C)*100.0/summary->nbases; \
 }\
-void process(kseq_t* ks, summary_t *summary){ \
+void process(kseq_t* ks, summary_t *summary, int offset){ \
     uint64_t k; \
     for(k = 0;k < ks->seq.l;++k){ \
         char base = ks->seq.s[k];\
         base == 'A'?summary->A++:base == 'T'?summary->T++:base=='G'?summary->G++:base=='C'?summary->C++:summary->N++; \
-        if (((int)ks->qual.s[k] - OFFSET) >= 30) {\
+        if (((int)ks->qual.s[k] - offset) >= 30) {\
             summary->Q30++;\
             summary->Q20++;\
         }\
-        else if (((int)ks->qual.s[k] - OFFSET) >= 20) \
+        else if (((int)ks->qual.s[k] - offset) >= 20) \
             summary->Q20++;\
         if (summary->base_qual_min > ks->qual.s[k]) \
             summary->base_qual_min = ks->qual.s[k]; \
@@ -57,7 +57,7 @@ void process(kseq_t* ks, summary_t *summary){ \
 void write_readlengths(FILE* fh, size_t* read_len){\
     fprintf(fh, "%zu\n", *read_len);\
 }\
-void stats(char* fastq){\
+void stats(char* fastq, int offset){\
     summary_t *summ;\
     summ = counts_init();\
     counts_default(summ);\
@@ -66,11 +66,10 @@ void stats(char* fastq){\
     snprintf(rlengths_file, sizeof rlengths_file, "%s%s", fastq,".rlen");\
     snprintf(phred_scores_file, sizeof phred_scores_file, "%s%s", fastq,".phred");\
     FILE *fh = fopen(rlengths_file,"w+");\
-    FILE *gh = fopen(phred_scores_file, "w+");\
     gzFile fp = gzopen(fastq, "r");\
     kseq_t *ks = kseq_init(fp);\
     while(kseq_read(ks)>=0){\
-        process(ks, summ);\
+        process(ks, summ, offset);\
         write_readlengths(fh, &ks->seq.l);\
     }\
     kseq_destroy(ks);\
@@ -84,8 +83,8 @@ void stats(char* fastq){\
     printf("Average read length : " "%.3f\n", summ->nbases*1.0/summ->nrecords);\
     printf("Read length range : " "%" PRIu64 " .. " "%" PRIu64 "\n", summ->read_len_min, summ->read_len_max);\
     printf("Quality range : " "%d .. %d\n" , summ->base_qual_min, summ->base_qual_max);\
-    printf("Phred range : " "%d .. %d\n" , summ->base_qual_min - OFFSET, summ->base_qual_max - OFFSET);\
-    printf("Offset : %d\n", OFFSET);\
+    printf("Phred range : " "%d .. %d\n" , summ->base_qual_min - offset, summ->base_qual_max - offset);\
+    printf("Offset : %d\n", offset);\
     printf("A : " "%" PRIu64 "\n", summ->A);\
     printf("T : " "%" PRIu64 "\n", summ->T);\
     printf("G : " "%" PRIu64 "\n", summ->G);\
@@ -93,5 +92,5 @@ void stats(char* fastq){\
     printf("N : " "%" PRIu64 "\n", summ->N);\
     printf("percent G-C content : %.3f\n", summ->GC);\
     free(summ);\
-    fclose(fh); fclose(gh);\
+    fclose(fh); \
 }

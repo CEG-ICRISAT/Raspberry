@@ -1,22 +1,79 @@
 /*
 Raspberry, a qc tool for processing large sets of fastq files quickly
-Authors:  AVSK Mohan Katta, Aamir  Khan, Rajeev Varshney
+Authors:  AVSK Mohan Katta, Aamir  Khan, Dadakhalandar Doddamani, Rajeev Varshney
 Center of Excellence in Genomics
 ICRISAT, India
 License GPL V3
 */
 #include<stdio.h>
+#include<stdlib.h>
+#include<Judy.h>
 #include<omp.h>
 #include "qc.h"
-COUNTS_INIT(OFFSET);
+void help(){
+fprintf(stderr, "Raspberry is a fast QC tool for parallel and batch processing of NGS reads in FASTQ format.\
+ The tool accepts both compressed and decompressed FASTQ format files.\
+ It has been developed and tested with data from Illumina HiSeq and Miseq platform.\
+ For more details just run raspberry at shell  \n\n \
+ Computational Genomics Group, CEG, ICRISAT, Patancheru, India 2015\
+");
+fprintf(stderr, "\n");
+fprintf(stderr, "Usage: raspberry [-p <int>] [-t <int>] *.fastq.gz | *.fastq\n");
+fprintf(stderr, "Options \n-p\t phred offset [default: 33]\n");
+fprintf(stderr, "-t\t number of threads [default: as available on the machine]\n");
+}
+int offset = 33;
+COUNTS_INIT;
+void run_parallel(int offset, int n_fastq_files, Pvoid_t PJLArray, int nt){
+    int k;
+    PWord_t PValue;
+    #pragma omp parallel
+    {
+    nt =  nt ? nt : omp_get_max_threads();
+    #pragma omp for ordered 
+    for(k=0; k < n_fastq_files; ++k){
+        JLG(PValue, PJLArray, k);
+        stats((unsigned char*) *PValue, offset);
+    }
+    }
+}
+
 int main(int argc, char** argv){
-int k;
-#pragma omp parallel
-{
-#pragma omp for ordered 
-for(k=1; k < argc; ++k){
-    stats(argv[k]);
+
+int key, nthreads = 0;
+//process options
+while((key = getopt(argc, argv, "p:t:")) >= 0){
+    switch(key){
+    case 'p':  
+        offset = atoi(optarg);
+        break;
+    case 't':
+        nthreads = atoi(optarg);
+        break;        
+    default:
+        help();
+        break;
+        return 0;
+    }
 }
+if(optind == argc){
+    help();
+    return 0;
 }
+//remaining non-option args
+    int n = argc - optind; 
+    Pvoid_t PJLArray = (Pvoid_t) NULL;
+    PWord_t PValue;
+    Word_t Index;
+    Word_t n_fastq_files;
+// read the rest of the args into  a judy array
+    for(Index=0; Index < n; ++Index){
+        JLI(PValue, PJLArray, Index);
+        *PValue = (Word_t) argv[optind++];
+    }
+//find total # indexes
+    JLC(n_fastq_files, PJLArray, 0, -1);
+//run main task
+    run_parallel(offset, n_fastq_files, PJLArray, nthreads);
 return 0;
 }
