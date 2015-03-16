@@ -66,9 +66,9 @@ if(optind == argc){
     int n = argc - optind; 
     Pvoid_t PJLArray = (Pvoid_t) NULL;
     PWord_t PValue;
-    Word_t Index;
+    Word_t Index, Rc_word;
     Word_t n_fastq_files;
-// read the rest of the args into  a judy array
+// read the rest of the args into an array
     for(Index=0; Index < n; ++Index){
         JLI(PValue, PJLArray, Index);
         *PValue = (Word_t) argv[optind++];
@@ -78,5 +78,6 @@ if(optind == argc){
     printf("number of files on cmd line:%lu\n", n_fastq_files);
 //run main task
     run_parallel(offset, n_fastq_files, PJLArray, nthreads);
+    JLFA(Rc_word, PJLArray);
 return 0;
 }
