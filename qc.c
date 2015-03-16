@@ -31,7 +31,7 @@ void run_parallel(int offset, int n_fastq_files, Pvoid_t PJLArray, int nt){
     omp_set_num_threads(nt);
     #pragma omp parallel
     {
-    printf("number of procs: %d\n", nt); 
+    //printf("number of procs: %d\n", nt); 
     #pragma omp for ordered 
     for(k=0; k < n_fastq_files; ++k){
         JLG(PValue, PJLArray, k); 
@@ -75,7 +75,7 @@ if(optind == argc){
     }
 //find total # indexes
     JLC(n_fastq_files, PJLArray, 0, -1);
-    printf("number of files on cmd line:%lu\n", n_fastq_files);
+    //printf("number of files on cmd line:%lu\n", n_fastq_files);
 //run main task
     run_parallel(offset, n_fastq_files, PJLArray, nthreads);
     JLFA(Rc_word, PJLArray);
