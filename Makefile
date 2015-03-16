@@ -83,6 +83,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/home/km/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -146,11 +156,6 @@ raspberry/fast:
 	$(MAKE) -f CMakeFiles/raspberry.dir/build.make CMakeFiles/raspberry.dir/build
 .PHONY : raspberry/fast
 
-# Manual pre-install relink rule for target.
-raspberry/preinstall:
-	$(MAKE) -f CMakeFiles/raspberry.dir/build.make CMakeFiles/raspberry.dir/preinstall
-.PHONY : raspberry/preinstall
-
 qc.o: qc.c.o
 .PHONY : qc.o
 
@@ -184,6 +189,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... raspberry"
 	@echo "... rebuild_cache"

@@ -27,12 +27,14 @@ COUNTS_INIT;
 void run_parallel(int offset, int n_fastq_files, Pvoid_t PJLArray, int nt){
     int k;
     PWord_t PValue;
+    if (!nt) nt = omp_get_num_procs();
+    omp_set_num_threads(nt);
     #pragma omp parallel
     {
-    nt =  nt ? nt : omp_get_max_threads();
+    printf("number of procs: %d\n", nt); 
     #pragma omp for ordered 
     for(k=0; k < n_fastq_files; ++k){
-        JLG(PValue, PJLArray, k);
+        JLG(PValue, PJLArray, k); 
         stats((unsigned char*) *PValue, offset);
     }
     }
@@ -73,6 +75,7 @@ if(optind == argc){
     }
 //find total # indexes
     JLC(n_fastq_files, PJLArray, 0, -1);
+    printf("number of files on cmd line:%lu\n", n_fastq_files);
 //run main task
     run_parallel(offset, n_fastq_files, PJLArray, nthreads);
 return 0;
