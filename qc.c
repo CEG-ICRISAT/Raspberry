@@ -18,9 +18,10 @@ fprintf(stderr, "Raspberry is a fast QC tool for parallel and batch processing o
  Computational Genomics Group, CEG, ICRISAT, Patancheru, India 2015\
 ");
 fprintf(stderr, "\n");
-fprintf(stderr, "Usage: raspberry [-p <int>] [-t <int>] *.fastq.gz | *.fastq\n");
+fprintf(stderr, "Usage: raspberry [-v] [-p <int>] [-t <int>] *.fastq.gz | *.fastq\n");
 fprintf(stderr, "Options \n-p\t phred offset [default: 33]\n");
 fprintf(stderr, "-t\t number of threads [default: as available on the machine]\n");
+fprintf(stderr, "-v\t print version number\n");
 }
 int offset = 33;
 COUNTS_INIT;
@@ -44,7 +45,7 @@ int main(int argc, char** argv){
 
 int key, nthreads = 0;
 //process options
-while((key = getopt(argc, argv, "p:t:")) >= 0){
+while((key = getopt(argc, argv, "p:t:v")) >= 0){
     switch(key){
     case 'p':  
         offset = atoi(optarg);
@@ -52,6 +53,10 @@ while((key = getopt(argc, argv, "p:t:")) >= 0){
     case 't':
         nthreads = atoi(optarg);
         break;        
+    case 'v':
+        printf("v%.1f\n\n",0.3);
+        //break;
+        return 0;
     default:
         help();
         break;
